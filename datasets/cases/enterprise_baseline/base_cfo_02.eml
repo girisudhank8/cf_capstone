@@ -1,0 +1,25 @@
+From: Victoria Vance <v.vance@apextech-corp.com>
+To: audit-committee@apextech-corp.com
+Subject: Preliminary FY2026 Audit Schedule
+Date: Thu, 12 Sep 2026 13:30:00 +0000
+Message-ID: <base.cfo.2@apextech-corp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: pass client-ip=198.51.100.10;
+Authentication-Results: mx.apextech-corp.com;
+    dkim=pass header.i=@apextech-corp.com;
+    spf=pass smtp.mailfrom=v.vance@apextech-corp.com;
+    dmarc=pass header.from=apextech-corp.com
+DKIM-Signature: v=1; a=rsa-sha256; d=apextech-corp.com; s=apex2026; h=from:to:subject:date; bh=dGhpc2lzYXRlc3Q=; b=Y2Zvc2lnbmF0dXJl
+Return-Path: <v.vance@apextech-corp.com>
+Received: from internal-mail.apextech-corp.com ([10.0.1.6])
+    by mx.apextech-corp.com with ESMTPS id APEX-CFO-2;
+    Thu, 12 Sep 2026 13:30:00 +0000
+
+Colleagues,
+
+Here is the documentation regarding Preliminary FY2026 Audit Schedule. All department heads must ensure compliance.
+
+Warm regards,
+Victoria Vance
+Chief Financial Officer

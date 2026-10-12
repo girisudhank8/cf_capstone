@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Communication Graph | BEC-FORGE{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Interactive Communication Graph Analysis</h1>
+    <div class="page-desc">Core Innovation #2: Real-time network topology of sender-recipient interactions. Flags newly established relationships, executive impersonation vectors, and anomalous edges.</div>
+  </div>
+</div>
+
+<!-- Graph Summary Cards -->
+<div class="grid-4" style="margin-bottom: 24px;">
+  <div class="card metric-card">
+    <div class="metric-label">Total Network Nodes</div>
+    <div class="metric-value">{{ graph_data.summary.total_nodes }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Observed Communication Edges</div>
+    <div class="metric-value" style="color: var(--accent-cyan);">{{ graph_data.summary.total_edges }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">New / First-Time Relationships</div>
+    <div class="metric-value" style="color: var(--accent-red);">{{ graph_data.summary.new_relationships }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Graph Topology Engine</div>
+    <div class="metric-value" style="color: var(--accent-green); font-size: 1.4rem; padding-top: 6px;">NetworkX DiGraph</div>
+  </div>
+</div>
+
+<!-- Interactive Network Graph Canvas -->
+<div class="card" style="margin-bottom: 24px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;">
+    <h3 style="font-size: 1.1rem; font-weight: 600;">Interactive Email Entity Network</h3>
+    <div style="font-size: 0.8rem; color: var(--text-muted);">
+      <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #f85149; margin-right: 4px;"></span> Executive / High-Risk
+      <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #58a6ff; margin-left: 12px; margin-right: 4px;"></span> Regular Sender
+      <span style="display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: #39c5cf; margin-left: 12px; margin-right: 4px;"></span> Recipient Contact
+    </div>
+  </div>
+
+  <div id="cy-container" style="width: 100%; height: 500px; background-color: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 8px;"></div>
+</div>
+
+<!-- Communication Edges Breakdown Table -->
+<div class="card">
+  <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 16px;">Observed Relationship Edges & Forensic Telemetry</h3>
+  {% if graph_data.edges %}
+  <table class="forensic-table">
+    <thead>
+      <tr>
+        <th>Sender Node</th>
+        <th>Direction</th>
+        <th>Recipient Node</th>
+        <th>Interaction Frequency</th>
+        <th>Relationship Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for edge in graph_data.edges %}
+      <tr>
+        <td><span class="code-field">{{ edge.source }}</span></td>
+        <td style="color: var(--accent-blue); font-weight: 800;">→</td>
+        <td><span class="code-field">{{ edge.target }}</span></td>
+        <td>{{ edge.frequency }} email(s) exchanged</td>
+        <td>
+          {% if edge.is_new %}
+            <span class="badge badge-critical">🚨 NEW COMMUNICATION RELATIONSHIP</span>
+          {% else %}
+            <span class="badge badge-low">Verified Baseline Pair</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div style="text-align: center; padding: 40px; color: var(--text-muted);">
+    No communication edges established yet. Ingest emails to populate the network graph.
+  </div>
+  {% endif %}
+</div>
+
+<!-- Cytoscape.js Network Graph Integration -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/cytoscape/3.28.1/cytoscape.min.js"></script>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const rawData = {{ graph_data|tojson }};
+    const elements = [];
+
+    rawData.nodes.forEach(n => {
+      elements.push({
+        data: {
+          id: n.id,
+          label: n.label,
+          color: n.color,
+          size: Math.max(30, 20 + (n.degree * 10))
+        }
+      });
+    });
+
+    rawData.edges.forEach((e, idx) => {
+      elements.push({
+        data: {
+          id: 'e_' + idx,
+          source: e.source,
+          target: e.target,
+          lineColor: e.color,
+          width: e.is_new ? 3 : 1.5
+        }
+      });
+    });
+
+    cytoscape({
+      container: document.getElementById('cy-container'),
+      elements: elements,
+      style: [
+        {
+          selector: 'node',
+          style: {
+            'background-color': 'data(color)',
+            'label': 'data(label)',
+            'color': '#e6edf3',
+            'font-size': '11px',
+            'width': 'data(size)',
+            'height': 'data(size)',
+            'text-valign': 'bottom',
+            'text-margin-y': '6px'
+          }
+        },
+        {
+          selector: 'edge',
+          style: {
+            'width': 'data(width)',
+            'line-color': 'data(lineColor)',
+            'target-arrow-color': 'data(lineColor)',
+            'target-arrow-shape': 'triangle',
+            'curve-style': 'bezier'
+          }
+        }
+      ],
+      layout: {
+        name: 'cose',
+        animate: false,
+        padding: 40
+      }
+    });
+  });
+</script>
+{% endblock %}

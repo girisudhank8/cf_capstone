@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block title %}Evidence Ingestion Engine | BEC-FORGE{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Digital Evidence Ingestion & Forensic Intake</h1>
+    <div class="page-desc">
+      ISO/IEC 27037 compliant intake pipeline. Cryptographically ingests RFC-822 (.eml), bulk archives (.zip), and seized mailbox stores (.mbox).
+      Computes SHA-256 digests, enforces read-only storage permissions, and registers chain-of-custody ledgers.
+    </div>
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <form action="/evidence/audit" method="POST">
+      <button type="submit" class="btn-primary" style="background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan);">
+        🛡️ Verify All Hashes On Disk
+      </button>
+    </form>
+    <form action="/evidence/reset" method="POST" onsubmit="return confirm('Confirm clearing all active case evidence and resetting the database to a clean slate?');">
+      <button type="submit" class="btn-primary" style="background: rgba(255, 23, 68, 0.15); border: 1px solid var(--accent-red); color: var(--accent-red);">
+        🗑️ Reset Workspace
+      </button>
+    </form>
+  </div>
+</div>
+
+{% if success_msg %}
+<div class="card" style="border-left: 4px solid var(--accent-green); margin-bottom: 20px; background-color: rgba(63, 185, 80, 0.1);">
+  <strong style="color: var(--accent-green);">✓ {{ success_msg }}</strong>
+</div>
+{% endif %}
+
+{% if error_msg %}
+<div class="card" style="border-left: 4px solid var(--accent-red); margin-bottom: 20px; background-color: rgba(248, 81, 73, 0.1);">
+  <strong style="color: var(--accent-red);">⚠ {{ error_msg }}</strong>
+</div>
+{% endif %}
+
+<div class="grid-2">
+  <!-- Upload Evidence Card -->
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <h3 style="font-size: 1.1rem; font-weight: 600;">Ingest Seized Digital Evidence</h3>
+      <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: rgba(57, 197, 207, 0.15); color: var(--accent-cyan); font-weight: 600;">
+        .EML • .ZIP • .MBOX
+      </span>
+    </div>
+
+    <form action="/acquisition/upload" method="POST" enctype="multipart/form-data">
+      <div style="margin-bottom: 16px;">
+        <label style="display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">
+          Case Identifier / Master Docket Reference
+        </label>
+        <input type="text" name="case_id" placeholder="e.g. CASE-2026-BEC-INVESTIGATION" style="width: 100%; padding: 10px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-size: 0.88rem;">
+      </div>
+
+      <div style="margin-bottom: 20px;">
+        <label style="display: block; font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; margin-bottom: 6px;">
+          Select Digital Evidence Container or Message Files
+        </label>
+        <input type="file" name="files" accept=".eml,.zip,.mbox" multiple required style="width: 100%; padding: 14px; background: var(--bg-tertiary); border: 1px dashed var(--border-color); border-radius: 6px; color: var(--text-main); font-size: 0.88rem; cursor: pointer;">
+        <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px; line-height: 1.4;">
+          <strong>Supported Forensic Formats:</strong><br/>
+          • Single / Multiple <code>.eml</code> RFC-822 raw email files<br/>
+          • <code>.zip</code> containers containing seized email collections<br/>
+          • <code>.mbox</code> standardized mailbox export archives (Google Takeout / Thunderbird / FTK)
+        </div>
+      </div>
+
+      <button type="submit" class="btn-primary" style="width: 100%; padding: 12px; font-size: 0.95rem; font-weight: 600;">
+        🔬 Securely Ingest, Hash & Execute Forensic Pipeline
+      </button>
+    </form>
+  </div>
+
+  <!-- Real-World Evidence Sourcing & Guidance -->
+  <div class="card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+      <h3 style="font-size: 1.1rem; font-weight: 600;">Real-World Evidence Ingestion Guide</h3>
+      <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: rgba(0, 230, 118, 0.15); color: var(--accent-green); font-weight: 600;">
+        FORENSIC INTAKE
+      </span>
+    </div>
+    
+    <p style="font-size: 0.82rem; color: var(--text-muted); margin-bottom: 14px; line-height: 1.5;">
+      Only evidence you explicitly upload will appear in the system. The platform never pre-loads or injects dummy records.
+    </p>
+
+    <div style="display: flex; flex-direction: column; gap: 12px;">
+      <div style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--accent-cyan); font-size: 0.85rem;">📁 Option 1: Use Ready Real-World Downloads</strong>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+          Real datasets have been downloaded to your project under <code>datasets/real_world_downloads/</code>:
+          <ul style="margin: 4px 0 0 16px;">
+            <li><code>real_corporate_emails.zip</code> (20 real corporate emails from Apache SpamAssassin)</li>
+            <li><code>nazario_phishing_sample.mbox</code> (91 real-world phishing lures from Jose Nazario archive)</li>
+          </ul>
+          You can select and upload either of these files using the form on the left.
+        </div>
+      </div>
+
+      <div style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--accent-green); font-size: 0.85rem;">✉️ Option 2: Export Live Emails From Your Inbox</strong>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+          <strong>Gmail:</strong> Open message &gt; <code>⋮</code> (options) &gt; <em>"Download message"</em> (saves as <code>.eml</code>).<br/>
+          <strong>Outlook:</strong> Open message &gt; <em>File &gt; Save As</em> (choose <code>.eml</code> or <code>.msg</code>).<br/>
+          <strong>Thunderbird:</strong> Right-click message &gt; <em>"Save As"</em>.
+        </div>
+      </div>
+
+      <div style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px; border: 1px solid var(--border-color);">
+        <strong style="color: var(--accent-orange); font-size: 0.85rem;">🏛️ Option 3: Public Forensic Repositories</strong>
+        <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; line-height: 1.4;">
+          Supports bulk exports from the <strong>CMU Enron Email Dataset</strong>, <strong>Apache SpamAssassin Public Corpus</strong>, and <strong>APWG / Nazario Phishing Archives</strong>.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

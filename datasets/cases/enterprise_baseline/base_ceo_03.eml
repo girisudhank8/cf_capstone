@@ -1,0 +1,27 @@
+From: Robert Sterling <robert.sterling@apextech-corp.com>
+To: legal@apextech-corp.com
+Subject: Compliance Documentation Review
+Date: Wed, 23 Sep 2026 13:15:00 +0000
+Message-ID: <base.ceo.3@apextech-corp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: pass (apextech-corp.com designates 198.51.100.10) client-ip=198.51.100.10;
+Authentication-Results: mx.apextech-corp.com;
+    dkim=pass header.i=@apextech-corp.com;
+    spf=pass smtp.mailfrom=robert.sterling@apextech-corp.com;
+    dmarc=pass (p=REJECT) header.from=apextech-corp.com
+DKIM-Signature: v=1; a=rsa-sha256; d=apextech-corp.com; s=apex2026; h=from:to:subject:date; bh=dGhpc2lzYXRlc3Q=; b=Y2Vvc2lnbmF0dXJl
+Return-Path: <robert.sterling@apextech-corp.com>
+Received: from internal-mail.apextech-corp.com ([10.0.1.5])
+    by mx.apextech-corp.com with ESMTPS id APEX-BASE-3;
+    Wed, 23 Sep 2026 13:15:00 +0000
+
+Hi Team,
+
+Please review the attached notes regarding Compliance Documentation Review.
+We will convene next Tuesday to review progress.
+
+Best regards,
+Robert Sterling
+Chief Executive Officer
+Apex Global Technologies

@@ -1,0 +1,30 @@
+From: Victoria Vance <v.vance@apextech-corp.com>
+To: Accounts Receivable <accounts@titan-industrial.com>
+Subject: Purchase Order PO-98442: Q4 Infrastructure Hardware
+Date: Mon, 05 Oct 2026 09:30:15 +0000
+Message-ID: <msg.20261005.093015.001@apextech-corp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: pass (apextech-corp.com: domain of v.vance@apextech-corp.com designates 198.51.100.22 as permitted sender) client-ip=198.51.100.22;
+Authentication-Results: mx.titan-industrial.com;
+    dkim=pass header.i=@apextech-corp.com header.s=apex2026;
+    spf=pass (apextech-corp.com: domain designates 198.51.100.22) smtp.mailfrom=v.vance@apextech-corp.com;
+    dmarc=pass (p=REJECT) header.from=apextech-corp.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=apextech-corp.com; s=apex2026; h=from:to:subject:date; bh=dGhpc2lzYXRlc3RoYXNo; b=VmljdG9yaWFWYW5jZURLSU1TaWduYXR1cmU=
+Return-Path: <v.vance@apextech-corp.com>
+Received: from mail-relay01.apextech-corp.com (mail-relay01.apextech-corp.com [198.51.100.22])
+    by edge01.titan-industrial.com with ESMTPS id TITAN-98442-01
+    for <accounts@titan-industrial.com>; Mon, 05 Oct 2026 09:30:16 +0000
+Received: from internal-client-04.apextech-corp.com ([10.4.12.104])
+    by mail-relay01.apextech-corp.com with ESMTPSA id APEX-OUT-01;
+    Mon, 05 Oct 2026 09:30:15 +0000
+
+Dear Titan Industrial Billing Team,
+
+Please find attached our finalized purchase order PO-98442 for the Q4 rack-mount server hardware.
+Our finance department will process the scheduled invoice once the delivery timeframe is confirmed.
+
+Best regards,
+Victoria Vance
+Chief Financial Officer
+Apex Global Technologies

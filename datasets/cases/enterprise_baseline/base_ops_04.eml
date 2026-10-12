@@ -1,0 +1,23 @@
+From: IT Support <support@apextech-corp.com>
+To: all-employees@apextech-corp.com
+Subject: Scheduled Single Sign-On Certificate Renewal
+Date: Fri, 04 Sep 2026 17:00:00 +0000
+Message-ID: <base.ops.4@apextech-corp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: pass client-ip=198.51.100.10;
+Authentication-Results: mx.apextech-corp.com;
+    dkim=pass header.i=@apextech-corp.com;
+    spf=pass smtp.mailfrom=support@apextech-corp.com;
+    dmarc=pass header.from=apextech-corp.com
+Return-Path: <support@apextech-corp.com>
+Received: from internal-mail.apextech-corp.com ([10.0.1.8])
+    by mx.apextech-corp.com with ESMTPS id APEX-OPS-4;
+    Fri, 04 Sep 2026 17:00:00 +0000
+
+Notice to staff,
+
+Please take note of the schedule for Scheduled Single Sign-On Certificate Renewal. Reach out if you have questions.
+
+Regards,
+Apex Operations Team

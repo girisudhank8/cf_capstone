@@ -1,0 +1,399 @@
+{% extends "base.html" %}
+
+{% block title %}Email Forensic Analysis | BEC-FORGE{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Forensic Email Dossier</h1>
+    <div class="page-desc">Comprehensive forensic inspection of headers, SPF/DKIM/DMARC/ARC authentication, domain consistency, and explainable risk breakdown.</div>
+  </div>
+  <div style="display: flex; gap: 10px; align-items: center;">
+    {% if selected_id %}
+    <a href="/api/reports/{{ selected_id }}/pdf" class="btn-primary" style="background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); text-decoration: none; padding: 8px 14px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+      📄 Download Forensic PDF Dossier
+    </a>
+    {% endif %}
+    <!-- Dropdown Selector -->
+    <form method="GET" action="/analysis" style="display: flex; gap: 8px;">
+      <select name="id" onchange="this.form.submit()" style="padding: 8px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-size: 0.85rem;">
+        {% for opt in options %}
+        <option value="{{ opt.evidence_id }}" {% if opt.evidence_id == selected_id %}selected{% endif %}>
+          {{ opt.evidence_id }} — {{ (opt.subject or '(No Subject)')[:45] }} [{{ opt.risk_level }}]
+        </option>
+        {% endfor %}
+      </select>
+    </form>
+  </div>
+</div>
+
+{% if not data %}
+<div class="card" style="text-align: center; padding: 40px;">
+  <p style="color: var(--text-muted);">Please select an evidence item to review the full forensic dossier.</p>
+</div>
+{% else %}
+
+<!-- Evidence Identity Block & Risk Score Banner -->
+<div class="grid-2">
+  <!-- Left: Forensic Integrity -->
+  <div class="card">
+    <div style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 8px;">
+      ■ FORENSIC CHAIN-OF-CUSTODY RECORD
+    </div>
+    <div style="display: grid; grid-template-columns: 140px 1fr; row-gap: 6px; font-size: 0.85rem;">
+      <span style="color: var(--accent-blue);">Evidence ID:</span>
+      <span class="code-field">{{ data.evidence.evidence_id }}</span>
+
+      <span style="color: var(--accent-blue);">Original File:</span>
+      <span>{{ data.evidence.filename }}</span>
+
+      <span style="color: var(--accent-blue);">SHA-256 Digest:</span>
+      <span class="code-field" style="color: var(--accent-cyan); word-break: break-all;">{{ data.evidence.sha256 }}</span>
+
+      <span style="color: var(--accent-blue);">Acquisition Time:</span>
+      <span>{{ data.evidence.acquired_at }}</span>
+
+      <span style="color: var(--accent-blue);">Integrity Status:</span>
+      <span style="color: var(--accent-green); font-weight: 700;">✓ {{ data.evidence.integrity }} (SHA-256 Match Verified)</span>
+    </div>
+  </div>
+
+  <!-- Right: Score Gauge -->
+  <div class="score-box">
+    <div class="metric-label">BEC Risk Assessment</div>
+    <div class="score-num" style="color: 
+      {% if data.risk.risk_level == 'CRITICAL' %}var(--accent-red)
+      {% elif data.risk.risk_level == 'HIGH' %}var(--accent-orange)
+      {% elif data.risk.risk_level == 'SUSPICIOUS' %}var(--accent-yellow)
+      {% elif data.risk.risk_level == 'MEDIUM' %}var(--accent-blue)
+      {% else %}var(--accent-green){% endif %};">
+      {{ "%.0f"|format(data.risk.total_score) }}
+    </div>
+    <div style="font-size: 0.8rem; color: var(--text-muted);">/ 100 MAXIMUM THREAT</div>
+    <div style="margin-top: 8px;">
+      <span class="badge 
+        {% if data.risk.risk_level == 'CRITICAL' %}badge-critical
+        {% elif data.risk.risk_level == 'HIGH' %}badge-high
+        {% elif data.risk.risk_level == 'SUSPICIOUS' %}badge-suspicious
+        {% elif data.risk.risk_level == 'MEDIUM' %}badge-medium
+        {% else %}badge-low{% endif %}">
+        {{ data.risk.risk_level }} BEC RISK
+      </span>
+    </div>
+  </div>
+</div>
+
+<!-- Phase 2: Multi-Layer Identity Consistency & Threat Hypothesis Banner -->
+<div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--accent-cyan); background-color: rgba(57, 197, 207, 0.05);">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.08em;">
+        PHASE 2 • MULTI-LAYER IDENTITY CONSISTENCY ENGINE
+      </span>
+      <h3 style="font-size: 1.15rem; margin-top: 2px;">
+        Threat Hypothesis: 
+        {% if data.risk.threat_hypothesis == 'POTENTIAL_SPOOFING' %}
+          <span style="color: var(--accent-red); font-weight: 800;">Potential Spoofing Indicator</span>
+        {% elif data.risk.threat_hypothesis == 'POSSIBLE_COMPROMISE' %}
+          <span style="color: var(--accent-yellow); font-weight: 800;">Possible Legitimate Account Compromise</span>
+        {% else %}
+          <span style="color: var(--accent-green); font-weight: 800;">Benign / Unspoofed Baseline</span>
+        {% endif %}
+      </h3>
+    </div>
+    <div>
+      <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Identity Consistency Score</div>
+      <div style="font-size: 1.6rem; font-weight: 800; color: {% if data.risk.identity_consistency_score < 50 %}var(--accent-red){% else %}var(--accent-green){% endif %};">
+        {{ data.risk.identity_consistency_score or 100 }} / 100
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Phase 3: Sender Identity Fingerprint & Identity Drift Banner -->
+<div class="card" style="margin-bottom: 24px; border-left: 4px solid {% if data.risk.identity_drift_score and data.risk.identity_drift_score >= 50 %}var(--accent-red){% else %}var(--accent-blue){% endif %}; background-color: rgba(88, 166, 255, 0.05);">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
+    <div>
+      <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 700; letter-spacing: 0.08em;">
+        PHASE 3 • SENDER IDENTITY FINGERPRINTING & DRIFT ENGINE
+      </span>
+      <h3 style="font-size: 1.15rem; margin-top: 2px;">
+        Identity Drift Severity: 
+        {% if data.risk.identity_drift_level == 'CRITICAL' %}
+          <span style="color: var(--accent-red); font-weight: 800;">IDENTITY DRIFT: CRITICAL</span>
+        {% elif data.risk.identity_drift_level == 'HIGH' %}
+          <span style="color: var(--accent-orange); font-weight: 800;">IDENTITY DRIFT: HIGH</span>
+        {% elif data.risk.identity_drift_level == 'MODERATE' %}
+          <span style="color: var(--accent-yellow); font-weight: 800;">IDENTITY DRIFT: MODERATE</span>
+        {% elif data.risk.identity_drift_level == 'LOW' %}
+          <span style="color: var(--accent-blue); font-weight: 800;">IDENTITY DRIFT: LOW</span>
+        {% else %}
+          <span style="color: var(--accent-green); font-weight: 800;">IDENTITY DRIFT: NONE / WITHIN BASELINE</span>
+        {% endif %}
+      </h3>
+    </div>
+    <div>
+      <div style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Identity Drift Score</div>
+      <div style="font-size: 1.6rem; font-weight: 800; color: {% if data.risk.identity_drift_score and data.risk.identity_drift_score >= 50 %}var(--accent-red){% elif data.risk.identity_drift_score and data.risk.identity_drift_score >= 25 %}var(--accent-yellow){% else %}var(--accent-green){% endif %};">
+        {{ "%.0f"|format(data.risk.identity_drift_score or 0) }} / 100
+      </div>
+    </div>
+<!-- Phase 7: BEC Attack-Chain Reconstruction Timeline (Core Innovation #4) -->
+<div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--accent-orange); background-color: rgba(240, 136, 62, 0.05);">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+    <div>
+      <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--accent-orange); font-weight: 700; letter-spacing: 0.08em;">
+        PHASE 7 • BEC ATTACK-CHAIN RECONSTRUCTION (CORE INNOVATION #4)
+      </span>
+      <h3 style="font-size: 1.15rem; margin-top: 2px;">
+        Forensic Attack Progression: 
+        {% if attack_chain and attack_chain.attack_detected %}
+          <span style="color: var(--accent-red); font-weight: 800;">ACTIVE BEC ATTACK CHAIN IDENTIFIED ({{ attack_chain.confidence_level }} CONFIDENCE)</span>
+        {% else %}
+          <span style="color: var(--accent-green); font-weight: 800;">NO MULTI-STAGE ATTACK SEQUENCE DETECTED</span>
+        {% endif %}
+      </h3>
+    </div>
+    <div style="font-size: 0.82rem; color: var(--text-muted);">
+      Observed Stages: <strong style="color: var(--text-main);">{{ attack_chain.total_stages_observed if attack_chain else 0 }} / 7</strong>
+    </div>
+  </div>
+
+  {% if attack_chain and attack_chain.stages %}
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+    {% for s in attack_chain.stages %}
+    <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-tertiary); padding: 10px 14px; border-radius: 6px; border-left: 3px solid {% if s.status == 'CONFIRMED' %}var(--accent-red){% else %}var(--border-color){% endif %};">
+      <div style="width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; background: {% if s.status == 'CONFIRMED' %}var(--accent-red){% else %}var(--border-color){% endif %}; color: #fff;">
+        {{ s.stage_id }}
+      </div>
+      <div style="flex: 1;">
+        <strong style="color: {% if s.status == 'CONFIRMED' %}var(--text-main){% else %}var(--text-muted){% endif %}; font-size: 0.88rem;">{{ s.stage_name }}</strong>
+        <div style="font-size: 0.75rem; color: var(--text-muted);">{{ s.description }}</div>
+      </div>
+      <div>
+        {% if s.status == 'CONFIRMED' %}
+          <span class="badge badge-critical">CONFIRMED</span>
+        {% else %}
+          <span class="badge badge-low" style="opacity: 0.4;">ABSENT</span>
+        {% endif %}
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+<!-- Email Headers Metadata -->
+<div class="card" style="margin-bottom: 24px;">
+  <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 14px;">📧 Header Metadata</h3>
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; font-size: 0.85rem;">
+    <div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">From:</strong> {{ data.email.from_name }} &lt;{{ data.email.from_address }}&gt;</div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">To:</strong> {{ data.email.to_raw }}</div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">CC:</strong> {{ data.email.cc_raw or '—' }}</div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">Subject:</strong> <strong>{{ data.email.subject }}</strong></div>
+    </div>
+    <div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">Date:</strong> {{ data.email.date_raw }}</div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">Reply-To:</strong> <span class="{% if data.email.reply_to and data.email.reply_to != data.email.from_address %}code-field" style="color: var(--accent-red);{% endif %}">{{ data.email.reply_to or '—' }}</span></div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">Return-Path:</strong> {{ data.email.return_path or '—' }}</div>
+      <div style="margin-bottom: 6px;"><strong style="color: var(--accent-blue);">Message-ID:</strong> <span class="code-field">{{ data.email.message_id or '—' }}</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- Authentication & Domain Inspection -->
+<div class="grid-2">
+  <!-- Auth Status -->
+  <div class="card">
+    <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 14px;">🔐 Authentication Forensics</h3>
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; text-align: center;">
+      <div style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px;">
+        <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">SPF</div>
+        <div style="font-size: 1.1rem; font-weight: 700; margin-top: 4px; color: {% if auth_parsed.spf == 'PASS' %}var(--accent-green){% elif auth_parsed.spf == 'FAIL' %}var(--accent-red){% else %}var(--text-muted){% endif %};">
+          {{ auth_parsed.spf }}
+        </div>
+      </div>
+      <div style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px;">
+        <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">DKIM</div>
+        <div style="font-size: 1.1rem; font-weight: 700; margin-top: 4px; color: {% if auth_parsed.dkim == 'PASS' %}var(--accent-green){% elif auth_parsed.dkim == 'FAIL' %}var(--accent-red){% else %}var(--text-muted){% endif %};">
+          {{ auth_parsed.dkim }}
+        </div>
+      </div>
+      <div style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px;">
+        <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">DMARC</div>
+        <div style="font-size: 1.1rem; font-weight: 700; margin-top: 4px; color: {% if auth_parsed.dmarc == 'PASS' %}var(--accent-green){% elif auth_parsed.dmarc == 'FAIL' %}var(--accent-red){% else %}var(--text-muted){% endif %};">
+          {{ auth_parsed.dmarc }}
+        </div>
+      </div>
+      <div style="background: var(--bg-tertiary); padding: 12px; border-radius: 6px;">
+        <div style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">ARC Chain</div>
+        <div style="font-size: 1.1rem; font-weight: 700; margin-top: 4px; color: {% if auth_parsed.arc == 'PASS' %}var(--accent-green){% elif auth_parsed.arc == 'FAIL' %}var(--accent-red){% else %}var(--text-muted){% endif %};">
+          {{ auth_parsed.arc }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Domain Consistency -->
+  <div class="card">
+    <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 14px;">🌐 Domain Alignment</h3>
+    <div style="font-size: 0.85rem;">
+      <div style="margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">From Domain:</span>
+        <span class="code-field">{{ domains.from_dom }}</span>
+      </div>
+      <div style="margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">Reply-To Domain:</span>
+        <span class="code-field" style="color: {% if domains.rt_dom != domains.from_dom and domains.rt_dom != '—' %}var(--accent-red){% else %}var(--accent-green){% endif %};">
+          {{ domains.rt_dom }}
+        </span>
+      </div>
+      <div style="margin-bottom: 8px;">
+        <span style="color: var(--text-muted);">Return-Path Domain:</span>
+        <span class="code-field">{{ domains.rp_dom }}</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Mail Routing Tracer (Hop-by-Hop Chronology) -->
+{% if routing and routing.hops %}
+<div class="card" style="margin-bottom: 24px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+    <div>
+      <h3 style="font-size: 1.05rem; font-weight: 600;">📡 Mail Routing Telemetry & MTA Hop Trace</h3>
+      <div style="font-size: 0.78rem; color: var(--text-muted);">
+        Chronological traversal across {{ routing.total_hops }} mail transfer agents (MTAs) from origin client to destination.
+      </div>
+    </div>
+    {% if routing.originating_ip %}
+    <div style="text-align: right;">
+      <span style="font-size: 0.72rem; color: var(--text-muted); text-transform: uppercase;">Originating IP:</span>
+      <span class="code-field" style="color: var(--accent-cyan); font-weight: 700;">{{ routing.originating_ip }}</span>
+      <span class="badge {% if routing.originating_ip_type == 'PUBLIC' %}badge-low{% else %}badge-medium{% endif %}">
+        {{ routing.originating_ip_type }}
+      </span>
+    </div>
+    {% endif %}
+  </div>
+
+  <table class="forensic-table" style="font-size: 0.82rem;">
+    <thead>
+      <tr>
+        <th style="width: 50px;">Hop</th>
+        <th>From Host / IP</th>
+        <th>By MTA Gateway</th>
+        <th>Protocol / Cipher</th>
+        <th>Timestamp</th>
+        <th>Transit Delay</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for hop in routing.hops %}
+      <tr>
+        <td><strong>#{{ hop.hop_number }}</strong></td>
+        <td>
+          <div>{{ hop.from_host or '—' }}</div>
+          {% if hop.from_ip %}
+          <div style="font-size: 0.75rem; margin-top: 2px;">
+            <span class="code-field">{{ hop.from_ip }}</span>
+            <span style="font-size: 0.7rem; color: var(--text-muted);">({{ hop.from_ip_type }})</span>
+          </div>
+          {% endif %}
+        </td>
+        <td><span class="code-field">{{ hop.by_host or '—' }}</span></td>
+        <td>
+          <span style="color: var(--accent-blue);">{{ hop.protocol or 'SMTP' }}</span>
+          {% if hop.tls_cipher %}<div style="font-size: 0.7rem; color: var(--text-muted);">{{ hop.tls_cipher }}</div>{% endif %}
+        </td>
+        <td style="color: var(--text-muted); font-size: 0.78rem;">{{ hop.timestamp_raw }}</td>
+        <td>
+          {% if hop.delay_seconds is not none %}
+            {% if hop.delay_seconds > 300 %}
+              <span style="color: var(--accent-red); font-weight: 700;">+{{ "%.0f"|format(hop.delay_seconds) }}s (DELAY)</span>
+            {% else %}
+              <span style="color: var(--accent-green);">+{{ "%.1f"|format(hop.delay_seconds) }}s</span>
+            {% endif %}
+          {% else %}
+            <span style="color: var(--text-muted);">Origin</span>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  {% if routing.anomalies_detected %}
+  <div style="margin-top: 12px; padding: 10px; background: rgba(255, 69, 0, 0.1); border-left: 3px solid var(--accent-orange); border-radius: 4px;">
+    <strong style="color: var(--accent-orange); font-size: 0.8rem;">Routing Inconsistencies Detected:</strong>
+    <ul style="margin: 4px 0 0 16px; font-size: 0.78rem; color: var(--text-muted);">
+      {% for anom in routing.anomalies_detected %}
+      <li>{{ anom }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+  {% endif %}
+</div>
+{% endif %}
+
+<!-- Forensic Findings Feed -->
+<div class="card" style="margin-bottom: 24px;">
+  <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 16px;">⚠️ Forensic Findings & Indicators ({{ data.findings|length }})</h3>
+  {% if data.findings %}
+    {% for f in data.findings %}
+    <div class="finding-item sev-{{ f.severity }}">
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+        <div>
+          <span class="badge badge-{{ f.severity|lower }}">{{ f.severity }}</span>
+          <strong style="margin-left: 8px; color: var(--text-main);">{{ f.title }}</strong>
+        </div>
+        <span style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">{{ f.category }}</span>
+      </div>
+      <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+        {{ f.description }}
+      </div>
+      {% if f.evidence_field %}
+      <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 6px;">
+        Evidence Field: <span class="code-field">{{ f.evidence_field }}</span>
+        {% if f.evidence_value %}
+          → <span class="code-field" style="color: var(--accent-yellow);">{{ f.evidence_value[:180] }}</span>
+        {% endif %}
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  {% else %}
+    <div style="color: var(--accent-green); font-size: 0.9rem;">✓ No forensic anomalies or BEC indicators detected.</div>
+  {% endif %}
+</div>
+
+<!-- Counterfactual Analysis -->
+{% if counterfactuals %}
+<div class="card" style="margin-bottom: 24px;">
+  <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 12px;">🔄 Counterfactual Explainability</h3>
+  <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 14px;">
+    Analytical simulation of how specific indicators drive the BEC risk score:
+  </p>
+  {% for cf in counterfactuals %}
+  <div style="background: var(--bg-tertiary); padding: 12px 16px; border-radius: 6px; margin-bottom: 8px; font-size: 0.85rem;">
+    <strong style="color: var(--accent-blue);">↩ {{ cf.condition }}</strong>
+    <div style="color: var(--text-muted); margin-top: 4px;">
+      Current Risk: <strong style="color: var(--text-main);">{{ "%.0f"|format(data.risk.total_score) }}</strong>
+      → Projected Risk: <strong style="color: var(--accent-green);">{{ "%.0f"|format(cf.score or cf.estimated_new_score or 0) }}</strong>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endif %}
+
+<!-- Raw Plaintext Email Body -->
+{% if data.email.body_plain %}
+<div class="card" style="margin-bottom: 24px;">
+  <h3 style="font-size: 1.05rem; font-weight: 600; margin-bottom: 12px;">📄 Evidence Email Body Content</h3>
+  <pre style="background: var(--bg-tertiary); padding: 16px; border-radius: 6px; color: var(--text-main); font-size: 0.85rem; overflow-x: auto; white-space: pre-wrap;">{{ data.email.body_plain }}</pre>
+</div>
+{% endif %}
+
+{% endif %}
+{% endblock %}

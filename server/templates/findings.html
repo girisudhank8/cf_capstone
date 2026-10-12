@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Forensic Findings | BEC-FORGE{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Forensic Indicators & Threat Findings</h1>
+    <div class="page-desc">Comprehensive log of all forensic findings extracted across all ingested emails, categorized by severity and attack layer.</div>
+  </div>
+</div>
+
+<!-- Findings Filter -->
+<div class="card" style="margin-bottom: 20px;">
+  <form method="GET" action="/findings" style="display: flex; gap: 16px; align-items: center; flex-wrap: wrap;">
+    <div>
+      <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Severity Filter</label>
+      <select name="severity" style="padding: 8px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-size: 0.85rem; display: block; margin-top: 4px;">
+        <option value="" {% if not selected_sev %}selected{% endif %}>All Severities</option>
+        <option value="CRITICAL" {% if selected_sev == 'CRITICAL' %}selected{% endif %}>CRITICAL Only</option>
+        <option value="HIGH" {% if selected_sev == 'HIGH' %}selected{% endif %}>HIGH Only</option>
+        <option value="MEDIUM" {% if selected_sev == 'MEDIUM' %}selected{% endif %}>MEDIUM Only</option>
+        <option value="LOW" {% if selected_sev == 'LOW' %}selected{% endif %}>LOW Only</option>
+        <option value="INFO" {% if selected_sev == 'INFO' %}selected{% endif %}>INFO Only</option>
+      </select>
+    </div>
+
+    <div>
+      <label style="font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;">Category Search</label>
+      <input type="text" name="category" value="{{ category_query or '' }}" placeholder="e.g. AUTHENTICATION or DOMAIN" style="padding: 8px 12px; background: var(--bg-tertiary); border: 1px solid var(--border-color); border-radius: 6px; color: var(--text-main); font-size: 0.85rem; display: block; margin-top: 4px;">
+    </div>
+
+    <div style="margin-top: 18px;">
+      <button type="submit" class="btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">Filter Findings</button>
+      <a href="/findings" style="margin-left: 10px; font-size: 0.85rem; color: var(--text-muted); text-decoration: none;">Reset</a>
+    </div>
+  </form>
+</div>
+
+<!-- Findings Count Banner -->
+<div style="margin-bottom: 16px; font-size: 0.9rem; color: var(--text-muted);">
+  Displaying <strong>{{ findings|length }}</strong> forensic finding(s):
+</div>
+
+<!-- Findings List -->
+{% if findings %}
+  {% for f in findings %}
+  <div class="finding-item sev-{{ f.severity }}">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+      <div>
+        <span class="badge badge-{{ f.severity|lower }}">{{ f.severity }}</span>
+        <strong style="margin-left: 8px; color: var(--text-main);">{{ f.title }}</strong>
+      </div>
+      <div>
+        <span class="code-field">{{ f.evidence_id }}</span>
+        <span style="font-size: 0.75rem; color: var(--text-muted); margin-left: 8px;">{{ f.category }}</span>
+      </div>
+    </div>
+    
+    <div style="font-size: 0.85rem; color: var(--text-muted); margin-top: 4px;">
+      {{ f.description }}
+    </div>
+
+    {% if f.evidence_field %}
+    <div style="font-size: 0.75rem; color: var(--text-muted); margin-top: 8px;">
+      Source Artifact: <span class="code-field">{{ f.evidence_field }}</span>
+      {% if f.evidence_value %}
+        → <span class="code-field" style="color: var(--accent-yellow);">{{ f.evidence_value[:180] }}</span>
+      {% endif %}
+    </div>
+    {% endif %}
+  </div>
+  {% endfor %}
+{% else %}
+  <div class="card" style="text-align: center; padding: 40px; color: var(--text-muted);">
+    No findings matched the requested filter.
+  </div>
+{% endif %}
+
+{% endblock %}

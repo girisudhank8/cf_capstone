@@ -1,0 +1,29 @@
+From: Accounts Receivable <accounts@titan-industria1.com>
+Reply-To: settlement-desk@titan-financial-routing.net
+To: Victoria Vance <v.vance@apextech-corp.com>
+Subject: Re: Purchase Order PO-98442: Q4 Infrastructure Hardware - Banking Audit Notice
+Date: Tue, 06 Oct 2026 03:14:10 +0000
+Message-ID: <msg.20261006.031410.003@titan-industria1.com>
+In-Reply-To: <msg.20261005.141522.002@titan-industrial.com>
+References: <msg.20261005.093015.001@apextech-corp.com> <msg.20261005.141522.002@titan-industrial.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: fail (titan-industrial.com: domain does not designate 192.0.2.144 as permitted sender) client-ip=192.0.2.144;
+Authentication-Results: mx.apextech-corp.com;
+    dkim=fail header.i=@titan-industria1.com;
+    spf=fail (apextech-corp.com: domain of accounts@titan-industria1.com does not designate sender) client-ip=192.0.2.144;
+    dmarc=fail (p=REJECT) header.from=titan-industria1.com
+Return-Path: <bounce@untrusted-relay-node.xyz>
+Received: from untrusted-relay-node.xyz (untrusted-relay-node.xyz [192.0.2.144])
+    by mx01.apextech-corp.com with ESMTP id APEX-IN-991
+    for <v.vance@apextech-corp.com>; Tue, 06 Oct 2026 03:14:11 +0000
+
+Victoria,
+
+Please be advised that due to our annual financial fiscal audit, our standard Citibank account is temporarily frozen for incoming electronic deposits.
+All pending remittance for PO-98442 must be routed through our audited escrow account.
+Please confirm when your accounting team is prepared to process the wire today.
+
+Regards,
+Billing & Settlements
+Titan Industrial Supplies

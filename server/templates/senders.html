@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Sender Intelligence & Fingerprints | BEC-FORGE{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Sender Identity Fingerprints & Behavioral Baselines</h1>
+    <div class="page-desc">Core Innovation #1: Behavioral identity profiles tracking typical sending hours, recipient relationships, Reply-To routing patterns, and Identity Drift indicators.</div>
+  </div>
+</div>
+
+<!-- Key Fingerprint Stats -->
+<div class="grid-4" style="margin-bottom: 24px;">
+  <div class="card metric-card">
+    <div class="metric-label">Profiled Senders</div>
+    <div class="metric-value">{{ fingerprints|length }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Senders with Severe Drift</div>
+    <div class="metric-value" style="color: var(--accent-red);">{{ severe_drift_count }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Baseline Evidence Corroboration</div>
+    <div class="metric-value" style="color: var(--accent-green); font-size: 1.5rem; padding-top: 6px;">ACTIVE</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Identity Drift Engine</div>
+    <div class="metric-value" style="color: var(--accent-cyan); font-size: 1.5rem; padding-top: 6px;">ONLINE</div>
+  </div>
+</div>
+
+<!-- Fingerprints Grid / Table -->
+{% if fingerprints %}
+  <div style="display: flex; flex-direction: column; gap: 20px;">
+    {% for fp in fingerprints %}
+    <div class="card" style="border-left: 4px solid var(--accent-blue);">
+      <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+        <div>
+          <h3 style="font-size: 1.2rem; color: var(--text-main); font-family: monospace;">{{ fp.sender_address }}</h3>
+          <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 2px;">
+            Display Names: <strong style="color: var(--text-main);">{{ fp.display_names|join(', ') or 'None Recorded' }}</strong>
+            • Ingested Corpus: <span class="code-field">{{ fp.sample_size }} verified email(s)</span>
+          </div>
+        </div>
+        <div>
+          <span class="badge badge-info">Pass Rate: {{ "%.0f"|format(fp.auth_pass_rate * 100) }}%</span>
+        </div>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; font-size: 0.84rem; background: var(--bg-tertiary); padding: 14px; border-radius: 6px;">
+        <div>
+          <div style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px;">Typical Sending Hours (UTC)</div>
+          <div>
+            {% if fp.typical_sending_hours %}
+              <span class="code-field" style="color: var(--accent-cyan);">
+                {{ "%02d:00"|format(fp.typical_sending_hours[0]) }} – {{ "%02d:00"|format(fp.typical_sending_hours[-1]) }}
+              </span>
+              <span style="color: var(--text-muted); font-size: 0.75rem;">(Active in {{ fp.typical_sending_hours|length }} slots)</span>
+            {% else %}
+              <span style="color: var(--text-muted);">Unrestricted / Not Established</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div>
+          <div style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px;">Frequent Recipients</div>
+          <div>
+            {% if fp.typical_recipients %}
+              {% for recip, count in fp.typical_recipients.items() %}
+                <div style="margin-bottom: 2px;"><span class="code-field">{{ recip }}</span> ({{ count }})</div>
+              {% endfor %}
+            {% else %}
+              <span style="color: var(--text-muted);">None</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div>
+          <div style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px;">Reply-To Baseline</div>
+          <div>
+            {% if fp.reply_to_addresses %}
+              {% for rta in fp.reply_to_addresses %}
+                <div class="code-field" style="color: var(--accent-green); margin-bottom: 2px;">{{ rta }}</div>
+              {% endfor %}
+            {% else %}
+              <span style="color: var(--text-muted);">Default (Matches From Address)</span>
+            {% endif %}
+          </div>
+        </div>
+
+        <div>
+          <div style="color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; margin-bottom: 4px;">Language Tendencies</div>
+          <div>Avg Urgency: <strong style="color: var(--accent-yellow);">{{ "%.1f"|format(fp.avg_urgency_score) }}</strong></div>
+          <div>Avg Financial: <strong style="color: var(--accent-blue);">{{ "%.1f"|format(fp.avg_financial_score) }}</strong></div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="card" style="text-align: center; padding: 40px; color: var(--text-muted);">
+    No sender fingerprints compiled yet. Ingest clean historical emails via <a href="/acquisition" style="color: var(--accent-blue);">Evidence Acquisition</a> to automatically build sender behavioral profiles.
+  </div>
+{% endif %}
+
+{% endblock %}

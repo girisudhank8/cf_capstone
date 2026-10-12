@@ -1,0 +1,24 @@
+From: Accounts Receivable <accounts@titan-industria1.com>
+Reply-To: wire-settlements@titan-financial-routing.net
+To: Victoria Vance <v.vance@apextech-corp.com>
+Subject: FINAL NOTICE: Wire Transfer Slip Required - Immediate Action Mandatory
+Date: Tue, 06 Oct 2026 06:10:00 +0000
+Message-ID: <msg.20261006.061000.005@titan-industria1.com>
+In-Reply-To: <msg.20261006.044500.004@titan-industria1.com>
+References: <msg.20261006.044500.004@titan-industria1.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: fail client-ip=198.51.100.99;
+Authentication-Results: mx.apextech-corp.com;
+    dkim=fail;
+    spf=fail;
+    dmarc=fail header.from=titan-industria1.com
+Return-Path: <attacker-drop@bulletproof-mta.top>
+
+Victoria,
+
+We have not received the bank transfer confirmation.
+You have 30 minutes before our freight forwarding partner incurs severe demurrage penalties.
+Act now and remit the wire transfer to the provided beneficiary account without delay.
+
+Director of Global Settlements

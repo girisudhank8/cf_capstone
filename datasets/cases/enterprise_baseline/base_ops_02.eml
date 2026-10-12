@@ -1,0 +1,23 @@
+From: HR Desk <hr@apextech-corp.com>
+To: all-employees@apextech-corp.com
+Subject: Annual Healthcare Enrollment Open
+Date: Fri, 02 Sep 2026 15:00:00 +0000
+Message-ID: <base.ops.2@apextech-corp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: pass client-ip=198.51.100.10;
+Authentication-Results: mx.apextech-corp.com;
+    dkim=pass header.i=@apextech-corp.com;
+    spf=pass smtp.mailfrom=hr@apextech-corp.com;
+    dmarc=pass header.from=apextech-corp.com
+Return-Path: <hr@apextech-corp.com>
+Received: from internal-mail.apextech-corp.com ([10.0.1.8])
+    by mx.apextech-corp.com with ESMTPS id APEX-OPS-2;
+    Fri, 02 Sep 2026 15:00:00 +0000
+
+Notice to staff,
+
+Please take note of the schedule for Annual Healthcare Enrollment Open. Reach out if you have questions.
+
+Regards,
+Apex Operations Team

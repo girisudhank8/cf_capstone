@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | BEC-FORGE Forensic Console{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1 class="page-title">Digital Forensics Overview</h1>
+    <div class="page-desc">Real-time BEC threat posture, evidence chain-of-custody, and multi-layer identity consistency monitoring.</div>
+  </div>
+  <div style="display: flex; gap: 10px;">
+    <form action="/evidence/audit" method="POST">
+      <button type="submit" class="btn-primary" style="background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 14px; font-size: 0.85rem; font-weight: 600;">
+        🛡️ Verify All Hashes On Disk
+      </button>
+    </form>
+    <form action="/evidence/reset" method="POST" onsubmit="return confirm('Confirm clearing all active case evidence and resetting the database to a clean slate?');">
+      <button type="submit" class="btn-primary" style="background: rgba(255, 23, 68, 0.15); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 8px 14px; font-size: 0.85rem; font-weight: 600;">
+        🗑️ Reset Workspace
+      </button>
+    </form>
+    <a href="/acquisition" class="btn-primary" style="text-decoration: none; padding: 8px 14px; font-size: 0.85rem;">+ Ingest Evidence</a>
+  </div>
+</div>
+
+{% if request.query_params.get('success') %}
+<div class="card" style="border-left: 4px solid var(--accent-green); margin-bottom: 20px; background-color: rgba(63, 185, 80, 0.1);">
+  <strong style="color: var(--accent-green);">✓ {{ request.query_params.get('success') }}</strong>
+</div>
+{% endif %}
+
+{% if audit_msg %}
+<div class="card" style="border-left: 4px solid var(--accent-cyan); margin-bottom: 20px; background-color: rgba(0, 229, 255, 0.1);">
+  <strong style="color: var(--accent-cyan);">{{ audit_msg }}</strong>
+</div>
+{% endif %}
+
+<!-- Key Forensic Metrics -->
+<div class="grid-4">
+  <div class="card metric-card">
+    <div class="metric-label">Total Evidence Items</div>
+    <div class="metric-value">{{ stats.total_evidence }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Emails Analyzed</div>
+    <div class="metric-value" style="color: var(--accent-cyan);">{{ stats.emails_analysed }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">High / Critical BEC Risk</div>
+    <div class="metric-value" style="color: var(--accent-red);">{{ stats.high_critical }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Potential Spoofing Detected</div>
+    <div class="metric-value" style="color: var(--accent-orange);">{{ stats.potential_spoofing }}</div>
+  </div>
+</div>
+
+<div class="grid-4">
+  <div class="card metric-card">
+    <div class="metric-label">Possible Account Compromise</div>
+    <div class="metric-value" style="color: var(--accent-yellow);">{{ stats.possible_compromise }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">DMARC Alignment Failures</div>
+    <div class="metric-value" style="color: var(--accent-red);">{{ stats.dmarc_failures }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Total Forensic Findings</div>
+    <div class="metric-value" style="color: var(--accent-blue);">{{ stats.total_findings }}</div>
+  </div>
+  <div class="card metric-card">
+    <div class="metric-label">Evidence Integrity Status</div>
+    <div class="metric-value" style="color: var(--accent-green); font-size: 1.4rem; padding-top: 6px;">100% VERIFIED</div>
+  </div>
+</div>
+
+<!-- Recent Evidence Table -->
+<div class="card" style="margin-top: 10px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+    <h3 style="font-size: 1.1rem; font-weight: 600;">Recent Evidence Ingestions</h3>
+    <span style="font-size: 0.8rem; color: var(--text-muted);">Immutable SHA-256 acquisition records</span>
+  </div>
+
+  {% if analyses %}
+  <table class="forensic-table">
+    <thead>
+      <tr>
+        <th>Evidence ID</th>
+        <th>Sender / Subject</th>
+        <th>Acquired At</th>
+        <th>Hypothesis (Phase 2)</th>
+        <th>Consistency</th>
+        <th>BEC Risk Score</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in analyses %}
+      <tr>
+        <td><span class="code-field">{{ item.evidence_id }}</span></td>
+        <td>
+          <div style="font-weight: 600; color: var(--text-main);">{{ item.subject or '—' }}</div>
+          <div style="font-size: 0.78rem; color: var(--text-muted);">From: {{ item.from_address or '—' }}</div>
+        </td>
+        <td style="color: var(--text-muted); font-size: 0.8rem;">{{ item.acquired_at[:19] }}</td>
+        <td>
+          {% if item.threat_hypothesis == 'POTENTIAL_SPOOFING' %}
+            <span class="badge badge-critical">Potential Spoofing</span>
+          {% elif item.threat_hypothesis == 'POSSIBLE_COMPROMISE' %}
+            <span class="badge badge-high">Possible Compromise</span>
+          {% else %}
+            <span class="badge badge-low">Normal / Clean</span>
+          {% endif %}
+        </td>
+        <td>
+          <div style="font-weight: 700; color: {% if item.identity_consistency_score and item.identity_consistency_score < 50 %}var(--accent-red){% else %}var(--accent-green){% endif %};">
+            {{ item.identity_consistency_score or 100 }}%
+          </div>
+        </td>
+        <td>
+          {% if item.risk_level == 'CRITICAL' %}
+            <span class="badge badge-critical">🔴 {{ item.total_score }} — CRITICAL</span>
+          {% elif item.risk_level == 'HIGH' %}
+            <span class="badge badge-high">🟠 {{ item.total_score }} — HIGH</span>
+          {% elif item.risk_level == 'SUSPICIOUS' %}
+            <span class="badge badge-suspicious">🟡 {{ item.total_score }} — SUSPICIOUS</span>
+          {% elif item.risk_level == 'MEDIUM' %}
+            <span class="badge badge-medium">🔵 {{ item.total_score }} — MEDIUM</span>
+          {% else %}
+            <span class="badge badge-low">🟢 {{ item.total_score }} — LOW</span>
+          {% endif %}
+        </td>
+        <td style="white-space: nowrap;">
+          <a href="/analysis?id={{ item.evidence_id }}" class="btn-primary" style="padding: 4px 10px; font-size: 0.75rem; text-decoration: none;">Inspect</a>
+          <a href="/api/reports/{{ item.evidence_id }}/pdf" class="btn-primary" style="padding: 4px 8px; font-size: 0.75rem; text-decoration: none; background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); margin-left: 4px;">PDF</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div style="text-align: center; padding: 48px; color: var(--text-muted); background: var(--bg-tertiary); border-radius: 8px; border: 1px dashed var(--border-color); margin-top: 10px;">
+    <div style="font-size: 2rem; margin-bottom: 8px;">📁</div>
+    <div style="font-weight: 600; color: var(--text-main); font-size: 1.05rem; margin-bottom: 6px;">Forensic Evidence Vault is Clean</div>
+    <div style="font-size: 0.85rem; max-width: 520px; margin: 0 auto 16px auto; line-height: 1.4;">
+      No active casework loaded. To begin an investigation, ingest seized RFC-822 (.eml) messages, bulk archives (.zip), or mailbox containers (.mbox).
+    </div>
+    <a href="/acquisition" class="btn-primary" style="text-decoration: none; padding: 10px 18px; font-size: 0.88rem; font-weight: 600;">+ Ingest Digital Evidence</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

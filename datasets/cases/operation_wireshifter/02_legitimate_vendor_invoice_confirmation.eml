@@ -1,0 +1,28 @@
+From: Accounts Receivable <accounts@titan-industrial.com>
+To: Victoria Vance <v.vance@apextech-corp.com>
+Subject: Re: Purchase Order PO-98442: Q4 Infrastructure Hardware
+Date: Mon, 05 Oct 2026 14:15:22 +0000
+Message-ID: <msg.20261005.141522.002@titan-industrial.com>
+In-Reply-To: <msg.20261005.093015.001@apextech-corp.com>
+References: <msg.20261005.093015.001@apextech-corp.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Received-SPF: pass (titan-industrial.com: domain of accounts@titan-industrial.com designates 203.0.113.88 as permitted sender) client-ip=203.0.113.88;
+Authentication-Results: mx.apextech-corp.com;
+    dkim=pass header.i=@titan-industrial.com header.s=titan2026;
+    spf=pass smtp.mailfrom=accounts@titan-industrial.com;
+    dmarc=pass header.from=titan-industrial.com
+Return-Path: <accounts@titan-industrial.com>
+Received: from mail.titan-industrial.com (mail.titan-industrial.com [203.0.113.88])
+    by mx01.apextech-corp.com with ESMTPS id APEX-IN-882
+    for <v.vance@apextech-corp.com>; Mon, 05 Oct 2026 14:15:23 +0000
+
+Hi Victoria,
+
+We have received PO-98442. The total invoice amount is $148,500.00.
+Shipment is scheduled for departure this Thursday. As per our standard terms,
+settlement will occur through our registered Citibank corporate account.
+
+Thank you,
+Accounts Receivable Department
+Titan Industrial Supplies

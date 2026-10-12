@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}BEC-FORGE Forensic Console{% endblock %}</title>
+  <link rel="stylesheet" href="/static/css/forensic.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <!-- Forensic Navigation Sidebar -->
+  <aside class="sidebar">
+    <div class="brand-logo">
+      <span>🛡️</span> BEC-FORGE
+    </div>
+    <div class="brand-subtitle">Forensic Investigation Engine</div>
+    
+    <ul class="nav-links">
+      <li class="nav-item {% if active_page == 'dashboard' %}active{% endif %}">
+        <a href="/">
+          <span>📊</span> Dashboard
+        </a>
+      </li>
+      <li class="nav-item {% if active_page == 'acquisition' %}active{% endif %}">
+        <a href="/acquisition">
+          <span>📥</span> Evidence Acquisition
+        </a>
+      </li>
+      <li class="nav-item {% if active_page == 'analysis' %}active{% endif %}">
+        <a href="/analysis">
+          <span>🔬</span> Email Forensic Analysis
+        </a>
+      </li>
+      <li class="nav-item {% if active_page == 'senders' %}active{% endif %}">
+        <a href="/senders">
+          <span>👤</span> Sender Intelligence & Fingerprints
+        </a>
+      </li>
+      <li class="nav-item {% if active_page == 'graph' %}active{% endif %}">
+        <a href="/graph">
+          <span>🌐</span> Communication Graph
+        </a>
+      </li>
+      <li class="nav-item {% if active_page == 'findings' %}active{% endif %}">
+        <a href="/findings">
+          <span>⚠️</span> Findings & Anomalies
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/docs" target="_blank">
+          <span>⚡</span> FastAPI OpenAPI Docs
+        </a>
+      </li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <div><strong>BEC-FORGE v2.0 (Phase 2)</strong></div>
+      <div style="color: var(--text-muted); font-size: 0.68rem; margin-top: 4px;">Cyber Forensics Capstone</div>
+    </div>
+  </aside>
+
+  <!-- Main Content View -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+</body>
+</html>
