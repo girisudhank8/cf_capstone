@@ -10,7 +10,7 @@
   </div>
   <div style="display: flex; gap: 10px; align-items: center;">
     {% if selected_id %}
-    <a href="/api/reports/{{ selected_id }}/pdf" class="btn-primary" style="background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); text-decoration: none; padding: 8px 14px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
+    <a href="/api/reports/{{ selected_id }}/pdf" class="btn-primary" style="background: rgba(8, 145, 178, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); text-decoration: none; padding: 8px 14px; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 6px;">
       📄 Download Forensic PDF Dossier
     </a>
     {% endif %}
@@ -37,23 +37,23 @@
 <div class="grid-2">
   <!-- Left: Forensic Integrity -->
   <div class="card">
-    <div style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 8px;">
+    <div style="font-size: 0.72rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 8px; font-weight: 600;">
       ■ FORENSIC CHAIN-OF-CUSTODY RECORD
     </div>
     <div style="display: grid; grid-template-columns: 140px 1fr; row-gap: 6px; font-size: 0.85rem;">
-      <span style="color: var(--accent-blue);">Evidence ID:</span>
+      <span style="color: var(--accent-blue); font-weight: 600;">Evidence ID:</span>
       <span class="code-field">{{ data.evidence.evidence_id }}</span>
 
-      <span style="color: var(--accent-blue);">Original File:</span>
+      <span style="color: var(--accent-blue); font-weight: 600;">Original File:</span>
       <span>{{ data.evidence.filename }}</span>
 
-      <span style="color: var(--accent-blue);">SHA-256 Digest:</span>
+      <span style="color: var(--accent-blue); font-weight: 600;">SHA-256 Digest:</span>
       <span class="code-field" style="color: var(--accent-cyan); word-break: break-all;">{{ data.evidence.sha256 }}</span>
 
-      <span style="color: var(--accent-blue);">Acquisition Time:</span>
+      <span style="color: var(--accent-blue); font-weight: 600;">Acquisition Time:</span>
       <span>{{ data.evidence.acquired_at }}</span>
 
-      <span style="color: var(--accent-blue);">Integrity Status:</span>
+      <span style="color: var(--accent-blue); font-weight: 600;">Integrity Status:</span>
       <span style="color: var(--accent-green); font-weight: 700;">✓ {{ data.evidence.integrity }} (SHA-256 Match Verified)</span>
     </div>
   </div>
@@ -84,7 +84,7 @@
 </div>
 
 <!-- Phase 2: Multi-Layer Identity Consistency & Threat Hypothesis Banner -->
-<div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--accent-cyan); background-color: rgba(57, 197, 207, 0.05);">
+<div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--accent-cyan); background-color: rgba(8, 145, 178, 0.05);">
   <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
     <div>
       <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--accent-cyan); font-weight: 700; letter-spacing: 0.08em;">
@@ -111,7 +111,7 @@
 </div>
 
 <!-- Phase 3: Sender Identity Fingerprint & Identity Drift Banner -->
-<div class="card" style="margin-bottom: 24px; border-left: 4px solid {% if data.risk.identity_drift_score and data.risk.identity_drift_score >= 50 %}var(--accent-red){% else %}var(--accent-blue){% endif %}; background-color: rgba(88, 166, 255, 0.05);">
+<div class="card" style="margin-bottom: 24px; border-left: 4px solid {% if data.risk.identity_drift_score and data.risk.identity_drift_score >= 50 %}var(--accent-red){% else %}var(--accent-blue){% endif %}; background-color: rgba(37, 99, 235, 0.05);">
   <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;">
     <div>
       <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--accent-blue); font-weight: 700; letter-spacing: 0.08em;">
@@ -138,8 +138,11 @@
         {{ "%.0f"|format(data.risk.identity_drift_score or 0) }} / 100
       </div>
     </div>
+  </div>
+</div>
+
 <!-- Phase 7: BEC Attack-Chain Reconstruction Timeline (Core Innovation #4) -->
-<div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--accent-orange); background-color: rgba(240, 136, 62, 0.05);">
+<div class="card" style="margin-bottom: 24px; border-left: 4px solid var(--accent-orange); background-color: rgba(234, 88, 12, 0.05);">
   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; flex-wrap: wrap; gap: 10px;">
     <div>
       <span style="font-size: 0.72rem; text-transform: uppercase; color: var(--accent-orange); font-weight: 700; letter-spacing: 0.08em;">
@@ -162,8 +165,8 @@
   {% if attack_chain and attack_chain.stages %}
   <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
     {% for s in attack_chain.stages %}
-    <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-tertiary); padding: 10px 14px; border-radius: 6px; border-left: 3px solid {% if s.status == 'CONFIRMED' %}var(--accent-red){% else %}var(--border-color){% endif %};">
-      <div style="width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; background: {% if s.status == 'CONFIRMED' %}var(--accent-red){% else %}var(--border-color){% endif %}; color: #fff;">
+    <div style="display: flex; align-items: center; gap: 12px; background: var(--bg-secondary); border: 1px solid var(--border-color); padding: 10px 14px; border-radius: 6px; border-left: 4px solid {% if s.status == 'CONFIRMED' %}var(--accent-red){% else %}#cbd5e1{% endif %};">
+      <div style="width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; background: {% if s.status == 'CONFIRMED' %}var(--accent-red){% else %}#cbd5e1{% endif %}; color: {% if s.status == 'CONFIRMED' %}#ffffff{% else %}#334155{% endif %};">
         {{ s.stage_id }}
       </div>
       <div style="flex: 1;">
@@ -174,7 +177,7 @@
         {% if s.status == 'CONFIRMED' %}
           <span class="badge badge-critical">CONFIRMED</span>
         {% else %}
-          <span class="badge badge-low" style="opacity: 0.4;">ABSENT</span>
+          <span class="badge badge-low" style="opacity: 0.55;">ABSENT</span>
         {% endif %}
       </div>
     </div>

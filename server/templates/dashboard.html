@@ -10,12 +10,12 @@
   </div>
   <div style="display: flex; gap: 10px;">
     <form action="/evidence/audit" method="POST">
-      <button type="submit" class="btn-primary" style="background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 14px; font-size: 0.85rem; font-weight: 600;">
+      <button type="submit" class="btn-primary" style="background: rgba(8, 145, 178, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); padding: 8px 14px; font-size: 0.85rem; font-weight: 600;">
         🛡️ Verify All Hashes On Disk
       </button>
     </form>
     <form action="/evidence/reset" method="POST" onsubmit="return confirm('Confirm clearing all active case evidence and resetting the database to a clean slate?');">
-      <button type="submit" class="btn-primary" style="background: rgba(255, 23, 68, 0.15); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 8px 14px; font-size: 0.85rem; font-weight: 600;">
+      <button type="submit" class="btn-primary" style="background: rgba(220, 38, 38, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red); padding: 8px 14px; font-size: 0.85rem; font-weight: 600;">
         🗑️ Reset Workspace
       </button>
     </form>
@@ -24,13 +24,13 @@
 </div>
 
 {% if request.query_params.get('success') %}
-<div class="card" style="border-left: 4px solid var(--accent-green); margin-bottom: 20px; background-color: rgba(63, 185, 80, 0.1);">
+<div class="card" style="border-left: 4px solid var(--accent-green); margin-bottom: 20px; background-color: rgba(22, 163, 74, 0.08);">
   <strong style="color: var(--accent-green);">✓ {{ request.query_params.get('success') }}</strong>
 </div>
 {% endif %}
 
 {% if audit_msg %}
-<div class="card" style="border-left: 4px solid var(--accent-cyan); margin-bottom: 20px; background-color: rgba(0, 229, 255, 0.1);">
+<div class="card" style="border-left: 4px solid var(--accent-cyan); margin-bottom: 20px; background-color: rgba(8, 145, 178, 0.08);">
   <strong style="color: var(--accent-cyan);">{{ audit_msg }}</strong>
 </div>
 {% endif %}
@@ -132,7 +132,7 @@
         </td>
         <td style="white-space: nowrap;">
           <a href="/analysis?id={{ item.evidence_id }}" class="btn-primary" style="padding: 4px 10px; font-size: 0.75rem; text-decoration: none;">Inspect</a>
-          <a href="/api/reports/{{ item.evidence_id }}/pdf" class="btn-primary" style="padding: 4px 8px; font-size: 0.75rem; text-decoration: none; background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); margin-left: 4px;">PDF</a>
+          <a href="/api/reports/{{ item.evidence_id }}/pdf" class="btn-primary" style="padding: 4px 8px; font-size: 0.75rem; text-decoration: none; background: rgba(8, 145, 178, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan); margin-left: 4px;">PDF</a>
         </td>
       </tr>
       {% endfor %}

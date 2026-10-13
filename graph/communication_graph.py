@@ -149,11 +149,11 @@ def get_graph_visualization_data() -> dict:
         
         # Color coding
         if is_exec:
-            color = "#f85149" # Red for execs
+            color = "#dc2626" # Red for execs
         elif attrs.get("type") == "sender":
-            color = "#58a6ff" # Blue for senders
+            color = "#2563eb" # Blue for senders
         else:
-            color = "#39c5cf" # Cyan for recipients
+            color = "#0891b2" # Cyan for recipients
 
         nodes.append({
             "id": n,
@@ -171,7 +171,7 @@ def get_graph_visualization_data() -> dict:
             "target": v,
             "frequency": attrs.get("weight", 1),
             "is_new": is_new,
-            "color": "#f85149" if is_new else "#30363d",
+            "color": "#dc2626" if is_new else "#94a3b8",
             "subjects": attrs.get("subjects", "")[:100],
         })
 

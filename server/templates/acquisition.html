@@ -13,12 +13,12 @@
   </div>
   <div style="display: flex; gap: 10px;">
     <form action="/evidence/audit" method="POST">
-      <button type="submit" class="btn-primary" style="background: rgba(0, 229, 255, 0.15); border: 1px solid var(--accent-cyan); color: var(--accent-cyan);">
+      <button type="submit" class="btn-primary" style="background: rgba(8, 145, 178, 0.1); border: 1px solid var(--accent-cyan); color: var(--accent-cyan);">
         🛡️ Verify All Hashes On Disk
       </button>
     </form>
     <form action="/evidence/reset" method="POST" onsubmit="return confirm('Confirm clearing all active case evidence and resetting the database to a clean slate?');">
-      <button type="submit" class="btn-primary" style="background: rgba(255, 23, 68, 0.15); border: 1px solid var(--accent-red); color: var(--accent-red);">
+      <button type="submit" class="btn-primary" style="background: rgba(220, 38, 38, 0.1); border: 1px solid var(--accent-red); color: var(--accent-red);">
         🗑️ Reset Workspace
       </button>
     </form>
@@ -26,13 +26,13 @@
 </div>
 
 {% if success_msg %}
-<div class="card" style="border-left: 4px solid var(--accent-green); margin-bottom: 20px; background-color: rgba(63, 185, 80, 0.1);">
+<div class="card" style="border-left: 4px solid var(--accent-green); margin-bottom: 20px; background-color: rgba(22, 163, 74, 0.08);">
   <strong style="color: var(--accent-green);">✓ {{ success_msg }}</strong>
 </div>
 {% endif %}
 
 {% if error_msg %}
-<div class="card" style="border-left: 4px solid var(--accent-red); margin-bottom: 20px; background-color: rgba(248, 81, 73, 0.1);">
+<div class="card" style="border-left: 4px solid var(--accent-red); margin-bottom: 20px; background-color: rgba(220, 38, 38, 0.08);">
   <strong style="color: var(--accent-red);">⚠ {{ error_msg }}</strong>
 </div>
 {% endif %}
@@ -42,7 +42,7 @@
   <div class="card">
     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
       <h3 style="font-size: 1.1rem; font-weight: 600;">Ingest Seized Digital Evidence</h3>
-      <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: rgba(57, 197, 207, 0.15); color: var(--accent-cyan); font-weight: 600;">
+      <span style="font-size: 0.72rem; padding: 2px 8px; border-radius: 4px; background: rgba(8, 145, 178, 0.1); color: var(--accent-cyan); font-weight: 600;">
         .EML • .ZIP • .MBOX
       </span>
     </div>

@@ -1,0 +1,142 @@
+Delivered-To: girisudhankarthikeyan@gmail.com
+Received: by 2002:a2e:7a0d:0:b0:3a7:6ce1:1143 with SMTP id v13csp52054ljc;
+        Mon, 12 Oct 2026 20:36:22 -0700 (PDT)
+X-Received: by 2002:a05:6402:190d:b0:6a9:850d:bb38 with SMTP id 4fb4d7f45d1cf-6b17c2a390cmr8612180a12.10.1791862582336;
+        Mon, 12 Oct 2026 20:36:22 -0700 (PDT)
+ARC-Seal: i=2; a=rsa-sha256; t=1791862582; cv=pass;
+        d=google.com; s=arc-20260327;
+        b=TDeAuis4jdKIEgy2yGX5mGj6WnjrvJr5eFDbJ/ZpfX9yA+qQVIUHOYRijEXocfELq2
+         kIBU11owYPIdaobQKB0pVBmo7Udj00R9ryqQJ911WchTynzD+OKJi73aFRP1x0UVlfrZ
+         gUDJWDBTSCLusTGYRRk4uMgxzqlBV63jUEnPK5uzHKx87T9jcrSOwS17wdYAmfvbZ1bA
+         r2lAWHka3JecSvz2N+EVsZCL8ojmMdqyKt9m+uInyvt7ABjYDjBjZ6a15cwu/XnCobpw
+         HHp0hvdw4gxu4OjputHAyHnsKmTaJYlp13D/FpuD+koyMoY2gs5eg9WCx/d7kuk/TZGV
+         Eqlw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=70+GSWmfq9/aXsVlT6WbDS9+bpeKxOcXzO2sW6v9X1E=;
+        fh=+Md+qPxxABNWf9rkfmTyhN3RJYXaW1/cDF3NEUhXdDY=;
+        b=AvQNOZiPAQnCpyuWKk9IGgUKK4tIHkD9KDL49bRnbOw927sjIVVQYUPySbMu5qVjoh
+         A4+n0XDzhNkCWl+x4CV7ZhVD0AOHL8pSLknVWEp8qY/wSRkAlrdu/vzaVSiC2CVzf9+J
+         BLcSHMb84cdqNxdWTrgtNKUZjgni7TuoqznmYeMcmmcxRl/x4AtLaBulE1LYtHbEBH58
+         igZiljcr2jvq+JpA+NTjyFpGYryTgj+rpy8cIztAUIVKZ2ru51Dsa34W05rMFdRiw4zX
+         +MQdyZlScw3qoYHnfKV7YD5I0Am/ehMmEvOU5dBqsDRjWsnHXA4mxhSB1D7xChoAs4Jz
+         alpQ==;
+        dara=google.com
+ARC-Authentication-Results: i=2; mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20251104 header.b=Kk1Q2jB7;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of jaipranav2006@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=jaipranav2006@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+Return-Path: <jaipranav2006@gmail.com>
+Received: from mail-sor-f41.google.com (mail-sor-f41.google.com. [209.85.220.41])
+        by mx.google.com with SMTPS id 4fb4d7f45d1cf-6b1ca710599sor948620a12.6.2026.10.12.20.36.22
+        for <girisudhankarthikeyan@gmail.com>
+        (Google Transport Security);
+        Mon, 12 Oct 2026 20:36:22 -0700 (PDT)
+Received-SPF: pass (google.com: domain of jaipranav2006@gmail.com designates 209.85.220.41 as permitted sender) client-ip=209.85.220.41;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@gmail.com header.s=20251104 header.b=Kk1Q2jB7;
+       arc=pass (i=1);
+       spf=pass (google.com: domain of jaipranav2006@gmail.com designates 209.85.220.41 as permitted sender) smtp.mailfrom=jaipranav2006@gmail.com;
+       dmarc=pass (p=NONE sp=QUARANTINE dis=NONE) header.from=gmail.com;
+       dara=pass header.i=@gmail.com
+ARC-Seal: i=1; a=rsa-sha256; t=1791862582; cv=none;
+        d=google.com; s=arc-20260327;
+        b=cpv8oxvARwfAq5CqudA+2d92eBb4pocyQjW0qsQ/HdSot8YbhVTFLea15EY69d13Xa
+         Fxc/il/Vx4ehit23wtYsac5wLErwpdgpMa4iewb9c3+HhfYMq9lhq51DmidgnVd9/XGV
+         f1ZkArgqVUnN4s5XCg6bYOJ3IN3aW11+uwHPWv7a1ez9lM8bDTC8tzYjnrEDq8xHGpaW
+         XUz7XhJenDkYgBKwAliuq0HJleUeGxyhNpn4c17EqqumyShOo9Lt5aR15Omp+zth3uni
+         KJNdZi0IAn7Ijo+s44Q/a4DPPSb8PZke0jKPZVG+dNhjBRyRepKxabKKVQeROpyejmqS
+         Q3Jg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
+         :dkim-signature;
+        bh=70+GSWmfq9/aXsVlT6WbDS9+bpeKxOcXzO2sW6v9X1E=;
+        fh=+Md+qPxxABNWf9rkfmTyhN3RJYXaW1/cDF3NEUhXdDY=;
+        b=LPQwPLB8TQDXgQ1QpZweX9DCnaY2SCCTTMloFy+AvnvQlNp2dluEDF2FaH9+sD0PF0
+         ZPVwbHs5UKql01avwNxEvxYwGTpQLcPAY59cHmnf1o5zHZzAvh1weGy5WBFgCX5ppO6T
+         raWQT7Fg1uPGsf+pB1G0NT2B7Htt7DFIBb14psdU1ZF8h+UzMnACEyrWxeATUTbb9tRo
+         k6P1YDk4Cx/WKfs/1Ct70yQKxWLvRHBYgqhYXPyOTF4GE6XMBsaVg4IyT6+lDYeGDIif
+         QIvwF6puOc9f75IVKP2emp+VvuXl7iKr4KUfXNpDJAtaOcF3BLhRqNPeMUzBChakHQ6o
+         vyTA==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1791862582; x=1792467382; dara=google.com;
+        h=content-type:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=70+GSWmfq9/aXsVlT6WbDS9+bpeKxOcXzO2sW6v9X1E=;
+        b=Kk1Q2jB7HCw1N7x/0ZrPMY3cpQVVHrpvQ82UnLHyZ1mz4EDP/HEjQHWBjz0YXWmebu
+         Fh6oU8zsdUJwpO1bs3YF74gHRTz3bKspgpnMb02pNZ0WGffopvPCnh2dwud/4u7g8wfr
+         aFSdMJF6Zm0xD4f1uS/jeGI957fNBNVjNXX+6OmiJRQrP+zjqLA7j8P6nVf3yFjsvLno
+         1UHu8PL3JLWdiIvCm/4tpfvi/vmpJAfISx7xS7aafilwHp7EtWznEhtNO0wHA3lWlStI
+         AjEenOQEHB9te00Y2R9lCbpFEgs/7rEStSZRjUpjTI7SQUxK/JBOJa4vScLncbGXRKpL
+         jR5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20260707; t=1791862582; x=1792467382;
+        h=content-type:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=70+GSWmfq9/aXsVlT6WbDS9+bpeKxOcXzO2sW6v9X1E=;
+        b=MU7J+FeDLlBGkR1o9G5/jp4cqAX568jqpNhRqhqQQiT8g4Uz+OLFSsSCTAJRKlBPmZ
+         5C1mKRH2SWHrDY6chZJYSoJAGpz/oJBYJGvfe38qmLKk7nZfFd5jQkXBu9NPaOtQGEHH
+         VS5CyUAN7eKpUk5QOgcXgK14MCqb6ZM0zysfz91Jz9LDsLOA96htQFwdK42F/n6hAKPI
+         I+R1cbNelof26bTrQx9X9a1E01gzyAiSp9NB7YdfMQ4Z/fFWnr8N7/zJIYKnYIQAUWGu
+         vPnjO643A/nO3skQb+pe5GIMAOtScWjphKmP2HZ99sgrQE34+mum0UFBiwRj3UT7jNG1
+         Zt9Q==
+X-Gm-Message-State: AFq9FYLzlfWGtRliMbAcTQK9uW8ybBCxm+PxR8gCgEC1vtpZNMDo3Efs
+	RzXmt7rs8j+GX5JHt2t7fC62wHneQmjFfNmLFemNi+4qnXdLc+U08KQlPqhyh7PIYJHvdQthPEG
+	0fDt2sF3cnQLzowxz9MbmXPiBKegED1LwJw==
+X-Gm-Gg: AYBFou05roXsdrs8BuKuK1sF/1gaCxnS7HgD34+8FJZDK9fpGB+7fdja5q5i3xDmCP8
+	afh5XhDtxWwTSBvO3UyX8MAK9ucmteE0wXxquiEGMXlW909DGWSUarkOJKQUAT/853ok6YnDPF5
+	NRP2t+b4xp9Z8YOnshevAnvlFLmZyZ/nANq6xTso1xA+yXUm/jXmMjL/226rT8qjXbznUqaYCR/
+	ZJoYUeOxNuCDsJ+axNgHvh3qKQRQY+okC5m6ocnTFjDGwfx5ZLth7eNiUCA+IZJwy6YZug1KcdW
+	ZDTEBw/rLluSo6v3hJbYDkqPdkRjB+rFjqc26yTtaZx7zVbeXC52ojOT6/Q862GeKzT4e5jpkuy
+	CuXHuSa9XF+Zs+7jRRbRSUA==
+X-Received: by 2002:a05:6402:1f85:b0:6aa:e589:87df with SMTP id
+ 4fb4d7f45d1cf-6b17c2d4df1mr8865855a12.30.1791862581665; Mon, 12 Oct 2026
+ 20:36:21 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAOTU9z0CtgdB8z3=9mg4jZeVB1WtJH4XJqP6G7ksU8Z-7Xr93Q@mail.gmail.com>
+In-Reply-To: <CAOTU9z0CtgdB8z3=9mg4jZeVB1WtJH4XJqP6G7ksU8Z-7Xr93Q@mail.gmail.com>
+From: Jai Pranav <jaipranav2006@gmail.com>
+Date: Tue, 13 Oct 2026 09:06:09 +0530
+X-Gm-Features: AclHuK92JInS7ifmkhbiJigUgAlcEcfFEXPWwIMws8PXjVFXoqSp8TnEN5tN6gA
+Message-ID: <CAJo+7XB+oCEk6R3GWhSMfYBYXvah0+2aJF6LeS+3aBmBM_MbNw@mail.gmail.com>
+Subject: Fwd: Bonus offer- click the link to avail
+To: "girisudhankarthikeyan@gmail.com" <girisudhankarthikeyan@gmail.com>, Vishwak Sriram <vishwak.s46@gmail.com>
+Content-Type: multipart/alternative; boundary="000000000000aaa502065db084be"
+
+--000000000000aaa502065db084be
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+---------- Forwarded message ---------
+From: Kumar M S <kumarms2007@gmail.com>
+Date: Tue, 13 Oct 2026 at 8:55=E2=80=AFAM
+Subject: Bonus offer- click the link to avail
+To: jaipranav2006@gmail.com <jaipranav2006@gmail.com>
+
+
+Http://nyq.org
+
+--000000000000aaa502065db084be
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+<div><br></div><div><br><div class=3D"gmail_quote gmail_quote_container"><d=
+iv dir=3D"ltr" class=3D"gmail_attr">---------- Forwarded message ---------<=
+br>From: <strong class=3D"gmail_sendername" dir=3D"auto">Kumar M S</strong>=
+ <span dir=3D"auto">&lt;<a href=3D"mailto:kumarms2007@gmail.com">kumarms200=
+7@gmail.com</a>&gt;</span><br>Date: Tue, 13 Oct 2026 at 8:55=E2=80=AFAM<br>=
+Subject: Bonus offer- click the link to avail<br>To: <a href=3D"mailto:jaip=
+ranav2006@gmail.com">jaipranav2006@gmail.com</a> &lt;<a href=3D"mailto:jaip=
+ranav2006@gmail.com">jaipranav2006@gmail.com</a>&gt;<br></div><br><br><div =
+dir=3D"auto"><a href=3D"Http://nyq.org" target=3D"_blank">Http://nyq.org</a=
+></div>
+</div></div>
+
+--000000000000aaa502065db084be--
